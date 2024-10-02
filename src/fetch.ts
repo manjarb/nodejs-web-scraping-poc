@@ -1,21 +1,19 @@
-import fs from "fs";
-import { fetchPage } from "./utils/fetchPage";
+import { fetchPage } from "./utils/fetchPage.util";
+import { parseArguments } from "./utils/argsParser.util";
 
-// Main function to handle multiple URLs
 async function main(): Promise<void> {
-  const urls = process.argv.slice(2); // Get URLs from command line arguments
+  const { urls, outputDir, maxRetries } = parseArguments(process.argv.slice(2));
 
-  // Ensure web-pages directory exists
-  if (!fs.existsSync("web-pages")) {
-    fs.mkdirSync("web-pages");
-  }
+  // Fetch pages
+  const fetchPromises = urls.map((url) =>
+    fetchPage({ url, outputDir, maxRetries })
+  );
 
-  console.log(urls, ' :url');
-
-  // Fetch each URL
-  for (const url of urls) {
-    await fetchPage(url);
-  }
+  await Promise.all(fetchPromises);
 }
 
-main();
+main().catch((error) => {
+  // Consider providing more context in the error message or exiting the process with a non-zero exit code to indicate failure.
+  console.error("An unexpected error occurred:", error);
+  process.exit(1);
+});
