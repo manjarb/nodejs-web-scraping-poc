@@ -2,11 +2,11 @@ import { fetchPage } from "./utils/fetchPage.util";
 import { parseArguments } from "./utils/argsParser.util";
 
 async function main(): Promise<void> {
-  const { urls, outputDir, maxRetries } = parseArguments(process.argv.slice(2));
+  const { urls, outputDir, maxRetries, showMetadata } = parseArguments(process.argv.slice(2));
 
   // Fetch pages
   const fetchPromises = urls.map((url) =>
-    fetchPage({ url, outputDir, maxRetries })
+    fetchPage({ url, outputDir, maxRetries, showMetadata })
   );
 
   await Promise.all(fetchPromises);

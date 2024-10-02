@@ -4,6 +4,7 @@ import { IFetchOptions } from "../interfaces/fetchPage.interface";
 import { ensureDirectoryExists, saveFile } from "./file.util";
 import { adjustAssetPaths } from "./html.util";
 import { downloadAssetWithRetry } from "./assetDownloader.util";
+import { collectMetadata } from "./metadata.util";
 
 const defaultSupportedExtensions = [
   ".jpg",
@@ -29,6 +30,7 @@ export async function fetchPage({
   url,
   outputDir,
   maxRetries = 3,
+  showMetadata = false,
 }: IFetchOptions): Promise<void> {
   try {
     // Fetch HTML content
@@ -54,7 +56,28 @@ export async function fetchPage({
     const indexPath = path.join(siteDir, "index.html");
     saveFile(indexPath, htmlContent);
 
+    console.log('-------------------------')
     console.log(`Downloaded site: ${url}`);
+
+    // Print Metadata
+    if (showMetadata) {
+      const { numLinks, numImages, lastFetch } = collectMetadata(htmlContent);
+      console.log(`site: ${parsedUrl}`);
+      console.log(`num_links: ${numLinks}`);
+      console.log(`images: ${numImages}`);
+      console.log(`last_fetch: ${lastFetch.toUTCString()}`);
+
+      // Optional: Save metadata to a file
+      const metadataInfo = {
+        site: parsedUrl,
+        num_links: numLinks,
+        images: numImages,
+        last_fetch: lastFetch.toISOString(),
+      };
+
+      const metadataPath = path.join(siteDir, "metadata.json");
+      saveFile(metadataPath, JSON.stringify(metadataInfo, null, 2));
+    }
     // eslint-disable-next-line
   } catch (error: any) {
     console.error(`Failed to fetch ${url}: ${error.message}`);

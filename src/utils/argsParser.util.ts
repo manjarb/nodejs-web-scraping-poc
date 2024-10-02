@@ -20,6 +20,7 @@ export function parseArguments(args: string[]): IParsedArguments {
   // Default options
   let outputDir = "web-pages";
   let maxRetries = 3;
+  let showMetadata = false;
 
   // Parse options
   optionsArgs.forEach((option) => {
@@ -27,6 +28,8 @@ export function parseArguments(args: string[]): IParsedArguments {
       outputDir = option.split("=")[1];
     } else if (option.startsWith("--retries=")) {
       maxRetries = parseInt(option.split("=")[1], 10);
+    } else if (option === "--metadata") {
+      showMetadata = true;
     }
   });
 
@@ -37,5 +40,6 @@ export function parseArguments(args: string[]): IParsedArguments {
     urls,
     outputDir,
     maxRetries,
+    showMetadata
   };
 }

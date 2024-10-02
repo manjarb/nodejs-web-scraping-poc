@@ -25,8 +25,6 @@ export async function downloadAsset(
   const fullLocalPath = path.join(siteDir, localAssetPath);
 
   saveFile(fullLocalPath, assetResponse.data);
-
-  console.log(`Saved asset: ${localAssetPath}`);
 }
 
 /**
