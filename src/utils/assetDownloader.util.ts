@@ -42,6 +42,7 @@ export async function downloadAssetWithRetry(
 ): Promise<void> {
   try {
     await downloadAsset(assetUrl, siteDir);
+    // eslint-disable-next-line
   } catch (error: any) {
     if (retriesLeft > 0) {
       console.warn(`Retrying ${assetUrl}, retries left: ${retriesLeft - 1}`);

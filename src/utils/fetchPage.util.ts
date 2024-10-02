@@ -5,6 +5,22 @@ import { ensureDirectoryExists, saveFile } from "./file.util";
 import { adjustAssetPaths } from "./html.util";
 import { downloadAssetWithRetry } from "./assetDownloader.util";
 
+const defaultSupportedExtensions = [
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".gif",
+  ".svg",
+  ".webp", // Images
+  ".css", // CSS
+  ".js", // JavaScript
+  ".woff",
+  ".woff2",
+  ".ttf",
+  ".otf",
+  ".eot", // Fonts
+];
+
 /**
  * Fetches a web page and saves it along with its assets.
  * @param options - The options for fetching the page.
@@ -39,6 +55,7 @@ export async function fetchPage({
     saveFile(indexPath, htmlContent);
 
     console.log(`Downloaded site: ${url}`);
+    // eslint-disable-next-line
   } catch (error: any) {
     console.error(`Failed to fetch ${url}: ${error.message}`);
   }
@@ -80,7 +97,7 @@ function extractAssetUrls(html: string, baseUrl: string): string[] {
       try {
         return new URL(assetUrl, baseUrl).href;
       } catch (error) {
-        console.warn(`Invalid URL skipped: ${assetUrl}`);
+        console.warn(`Invalid URL skipped: ${assetUrl}: ${error}`);
         return null;
       }
     })
@@ -94,22 +111,10 @@ function extractAssetUrls(html: string, baseUrl: string): string[] {
  * @param assetUrl - The asset URL to check.
  * @returns True if supported, false otherwise.
  */
-function isAssetTypeSupported(assetUrl: string): boolean {
-  const supportedExtensions = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-    ".svg",
-    ".webp", // Images
-    ".css", // CSS
-    ".js", // JavaScript
-    ".woff",
-    ".woff2",
-    ".ttf",
-    ".otf",
-    ".eot", // Fonts
-  ];
+function isAssetTypeSupported(
+  assetUrl: string,
+  supportedExtensions = defaultSupportedExtensions
+): boolean {
   const pathname = new URL(assetUrl, "http://example.com").pathname;
   return supportedExtensions.some((ext) =>
     pathname.toLowerCase().endsWith(ext)
