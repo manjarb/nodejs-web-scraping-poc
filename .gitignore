@@ -1,0 +1,22 @@
+# Node modules
+node_modules/
+
+# Dist folder for compiled output (if you ever build)
+dist/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS / IDE specific files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Environment variables
+.env
