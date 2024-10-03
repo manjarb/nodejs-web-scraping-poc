@@ -12,14 +12,14 @@ const defaultSupportedExtensions = [
   ".png",
   ".gif",
   ".svg",
-  ".webp", // Images
-  ".css", // CSS
-  ".js", // JavaScript
+  ".webp",
+  ".css",
+  ".js",
   ".woff",
   ".woff2",
   ".ttf",
   ".otf",
-  ".eot", // Fonts
+  ".eot",
 ];
 
 /**
@@ -56,7 +56,7 @@ export async function fetchPage({
     const indexPath = path.join(siteDir, "index.html");
     saveFile(indexPath, htmlContent);
 
-    console.log('-------------------------')
+    console.log("-------------------------");
     console.log(`Downloaded site: ${url}`);
 
     // Print Metadata
@@ -78,9 +78,12 @@ export async function fetchPage({
       const metadataPath = path.join(siteDir, "metadata.json");
       saveFile(metadataPath, JSON.stringify(metadataInfo, null, 2));
     }
-    // eslint-disable-next-line
-  } catch (error: any) {
-    console.error(`Failed to fetch ${url}: ${error.message}`);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(`Failed to fetch ${url}: ${error.message}`);
+    } else {
+      console.error(`Failed to fetch ${url}: unknown error`);
+    }
   }
 }
 
@@ -102,7 +105,6 @@ function extractAssetUrls(html: string, baseUrl: string): string[] {
     const assetUrl = match[1];
     assetUrls.add(assetUrl);
   }
-
 
   // Filter out unwanted URLs and keep only specific asset types
   const filteredAssetUrls = Array.from(assetUrls).filter(

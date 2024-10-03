@@ -40,13 +40,16 @@ export async function downloadAssetWithRetry(
 ): Promise<void> {
   try {
     await downloadAsset(assetUrl, siteDir);
-    // eslint-disable-next-line
-  } catch (error: any) {
+  } catch (error) {
     if (retriesLeft > 0) {
       console.warn(`Retrying ${assetUrl}, retries left: ${retriesLeft - 1}`);
       await downloadAssetWithRetry(assetUrl, siteDir, retriesLeft - 1);
     } else {
-      console.error(`Failed to download asset ${assetUrl}: ${error.message}`);
+      if (error instanceof Error) {
+        console.error(`Failed to download asset ${assetUrl}: ${error.message}`);
+      } else {
+        console.error(`Failed to download asset ${assetUrl}: Unknown error`);
+      }
     }
   }
 }

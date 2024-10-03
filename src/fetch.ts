@@ -1,7 +1,7 @@
 import { fetchPage } from "./utils/fetchPage.util";
 import { parseArguments } from "./utils/argsParser.util";
 
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
   const { urls, outputDir, maxRetries, showMetadata } = parseArguments(process.argv.slice(2));
 
   // Fetch pages
