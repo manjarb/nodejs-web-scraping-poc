@@ -8,8 +8,8 @@
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "eslint 'src/**/*.{js,ts}' --fix",
     "test:watch": "jest --watch",
-    "docker:build": "docker build -t fetch-web-pages .",
-    "docker:run": "docker run -it --rm -v $(pwd)/web-pages:/app/web-pages fetch-web-pages"
+    "docker:build": "docker build -t nodejs-web-scraping-poc .",
+    "docker:run": "docker run -it --rm -v $(pwd)/web-pages:/app/web-pages nodejs-web-scraping-poc"
   },
   "author": "",
   "license": "ISC",
