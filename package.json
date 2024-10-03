@@ -7,7 +7,9 @@
     "fetch": "ts-node src/fetch.ts",
     "lint": "eslint 'src/**/*.{js,ts}'",
     "lint:fix": "eslint 'src/**/*.{js,ts}' --fix",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "docker:build": "docker build -t fetch-web-pages .",
+    "docker:run": "docker run -it --rm -v $(pwd)/web-pages:/app/web-pages fetch-web-pages"
   },
   "author": "",
   "license": "ISC",
